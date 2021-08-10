@@ -1,27 +1,26 @@
 const http = require('http');
+const fs = require('fs');
 
 const server = http.createServer((req, res) => {
-	console.log('request made');
-	console.log(req.url, req.method);
-	/* info about url is gonna be very useful later 
-  becuase we wanna send back a diff res (resposes) based on
-  that route
-  */
-
 	// set header content type
 
 	res.setHeader('Content-Type', 'text/html');
 
-	res.write(
-		'<head><link rel="stylesheet" href="#"></head>'
-	); /* we can create our own html tags and 
-  effectively replace the default one in the browser
-  */
+	// send an html file
 
-	res.write('<p>Hole to Another Universe</p>');
-	res.write('<p>Arcadia Bay</p>');
+	fs.readFile('./views/index.html', (err, data) => {
+		if (err) {
+			console.log(err);
+			res.end();
+			/*if an error occurs we should always follow with 
+      a res.end() after console.log() beacause otherwise we 
+      are just going to keep the request hanging
+      */
+		}
 
-	res.end();
+		res.write(data); // sends res to browser
+		res.end();
+	});
 });
 
 server.listen(5000, 'localhost', () => {
