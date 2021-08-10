@@ -18,8 +18,10 @@ const server = http.createServer((req, res) => {
       */
 		}
 
-		res.write(data); // sends res to browser
-		res.end();
+		res.end(data);
+		/* if we're sending ONLY ONE thing into res.write() 
+    then we dont nedd res.write() we can just send the thing direcrtly into
+    the res.end(thing) method*/
 	});
 });
 
