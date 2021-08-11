@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const Blog = require('./models/blog');
 const lodash = require('lodash');
+const { result } = require('lodash');
 
 // express app
 
@@ -35,51 +36,32 @@ app.use(morgan('dev'));
 
 // mongoose & mongo sandbox routes
 
-app.get('/add-blog', (req, res) => {
-	const blog = new Blog({
-		title: 'New blog 2',
-		snippet: 'About my new blog 2',
-		body: 'more about my node express blog 2'
-	}); /* using the Model to create a new instance of 
-  a blog document (obj) within the code */
-
-	blog /* <-- saving a new doc to db */
-		.save()
-		.then((result) => {
-			console.log(result);
-			res.send(result);
-		})
-		.catch((err) => console.log(err));
-});
-
-// retrieving all blogs from collection
-
-app.get('/all-blogs', (req, res) => {
-	/* using a method on the model called find()*/
-	Blog.find().then((result) => res.send(result)).catch((err) => console.log(err));
-});
-
-// retrieving a single blog from the collection based on ID
-
-app.get('/single-blog', (req, res) => {
-	Blog.findById('6113e381b67cab7bddc1368e/').then((result) => res.send(result)).catch((err) => console.log(err));
-});
-
 // routes
 
 app.get('/', (req, res) => {
-	const blogs = [
-		{ title: 'alt-J', snippet: 'English indie rock band' },
-		{ title: 'Local Natives', snippet: 'American Indie rock band' },
-		{ title: 'Syd Matters', snippet: 'French indie band' }
-	];
-	res.render('index', { title: 'Home', blogs });
+	res.redirect('/blogs');
+	// const blogs = [
+	// 	{ title: 'alt-J', snippet: 'English indie rock band' },
+	// 	{ title: 'Local Natives', snippet: 'American Indie rock band' },
+	// 	{ title: 'Syd Matters', snippet: 'French indie band' }
+	// ];
+	// res.render('index', { title: 'Home', blogs });
 });
 
 app.get('/about', (req, res) => {
 	res.render('about', { title: 'About' });
 });
 
+// blog routes
+
+app.get('/blogs', (req, res) => {
+	Blog.find()
+		.sort({ createdAt: -1 })
+		.then((result) => {
+			res.render('index', { title: 'All Blogs', blogs: result });
+		})
+		.catch((err) => console.log(err));
+});
 app.get('/blogs/create', (req, res) => {
 	res.render('create', { title: 'Create' });
 });
