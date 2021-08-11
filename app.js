@@ -15,6 +15,10 @@ app.set('view engine', 'ejs'); /* app.set() lets us configure app settings */
 
 app.listen(5000);
 
+// middleware & static files
+
+app.use(express.static('public'));
+
 app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
