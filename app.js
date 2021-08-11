@@ -1,5 +1,7 @@
 const express = require('express'); // <-- returns a function
 const morgan = require('morgan');
+const mongoose = require('mongoose');
+const { error } = require('console');
 
 // express app
 
@@ -7,13 +9,21 @@ const app = express(); /*<-- invoking that function
 to create an instance of an express app
 which we are storing in a var*/
 
+// connect to mongoDB
+
+const dbURI =
+	'mongodb+srv://polka:WF9NFN6rOb2omBTz@cluster0.sgaoh.mongodb.net/nodeExpressBlog?retryWrites=true&w=majority';
+mongoose
+	.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true }) /* <-- async in nature */
+	.then((result) => {
+		console.log('conncected to db');
+		app.listen(5000);
+	})
+	.catch((error) => console.log(error));
+
 // register view engine
 
 app.set('view engine', 'ejs'); /* app.set() lets us configure app settings */
-
-// listen for requests
-
-app.listen(5000);
 
 // middleware & static files
 
