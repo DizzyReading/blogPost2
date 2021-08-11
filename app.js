@@ -14,6 +14,13 @@ app.set('view engine', 'ejs'); /* app.set() lets us configure app settings */
 
 app.listen(5000);
 
+app.use((req, res) => {
+	console.log('New request made');
+	console.log('host', req.hostname);
+	console.log('path', req.path);
+	console.log('method', req.method);
+});
+
 app.get('/', (req, res) => {
 	const blogs = [
 		{ title: 'alt-J', snippet: 'English indie rock band' },
