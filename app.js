@@ -14,11 +14,17 @@ app.set('view engine', 'ejs'); /* app.set() lets us configure app settings */
 
 app.listen(5000);
 
-app.use((req, res) => {
+app.use((req, res, next) => {
 	console.log('New request made');
 	console.log('host', req.hostname);
 	console.log('path', req.path);
 	console.log('method', req.method);
+	next(); /* <-- invoking this func to tell express that it can move on  */
+});
+
+app.use((req, res, next) => {
+	console.log('in the next middleware');
+	next();
 });
 
 app.get('/', (req, res) => {
