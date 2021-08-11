@@ -34,5 +34,5 @@ app.get('/blogs/create', (req, res) => {
 // 404 page
 
 app.use((req, res) => {
-	res.status(404).render('404');
+	res.status(404).render('404', { title: 404 });
 });
