@@ -31,21 +31,15 @@ app.set('view engine', 'ejs'); /* app.set() lets us configure app settings */
 // middleware & static files
 
 app.use(express.static('public'));
-
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // mongoose & mongo sandbox routes
 
-// routes
+//  routes
 
 app.get('/', (req, res) => {
 	res.redirect('/blogs');
-	// const blogs = [
-	// 	{ title: 'alt-J', snippet: 'English indie rock band' },
-	// 	{ title: 'Local Natives', snippet: 'American Indie rock band' },
-	// 	{ title: 'Syd Matters', snippet: 'French indie band' }
-	// ];
-	// res.render('index', { title: 'Home', blogs });
 });
 
 app.get('/about', (req, res) => {
@@ -62,6 +56,19 @@ app.get('/blogs', (req, res) => {
 		})
 		.catch((err) => console.log(err));
 });
+
+app.post('/blogs', (req, res) => {
+	const blog = new Blog(req.body);
+	console.log(req.body);
+
+	blog
+		.save()
+		.then((result) => {
+			res.redirect('/blogs');
+		})
+		.catch((err) => console.log(err));
+});
+
 app.get('/blogs/create', (req, res) => {
 	res.render('create', { title: 'Create' });
 });
